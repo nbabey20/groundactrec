@@ -1,0 +1,52 @@
+#TRAIN:
+#Early fusion
+python /workspace/trainheads/train_fusion_ablation.py \
+  --train_csv /workspace/datasets/inhard/indices/baseline_skel_train_bg.csv \
+  --val_csv   /workspace/datasets/inhard/indices/baseline_skel_val_bg.csv \
+  --log_dir   /workspace/har-fusion/runs/fusion \
+  --txt_log_dir /workspace/trainheads/runs/fusion \
+  --run_name  14cls_fusion_ablation_early1 \
+  --labelmap  /workspace/har-fusion/runs/fusion/14cls_fusion_v1/label2id.json \
+  --T 64 --tsn_segments 8 --tsn_snippet 8 \
+  --d_model 512 --n_heads 8 --depth 4 --ff_mult 4 --amp \
+  --decode_smpl --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data \
+  --fusion_type early
+
+#Late fusion
+python /workspace/trainheads/train_fusion_ablation.py \
+  --train_csv /workspace/datasets/ucf_indices/ucf_train.csv \
+  --val_csv   /workspace/datasets/ucf_indices/ucf19_occ_val.csv\
+  --log_dir   /workspace/har-fusion/runs/fusion \
+  --txt_log_dir /workspace/trainheads/runs/fusion \
+  --run_name  14cls_fusion_ablation_late_highocc1 \
+  --labelmap  /workspace/har-fusion/runs/video_only/label2id_ucf101.json \
+  --T 64 --tsn_segments 8 --tsn_snippet 8 \
+  --d_model 512 --n_heads 8 --depth 4 --ff_mult 4 --amp \
+  --decode_smpl --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data \
+  --fusion_type late --late_fuse_on logits --late_train_mode fused
+#late fusion multitask loss
+python /workspace/trainheads/train_fusion_ablation.py \
+  --train_csv /workspace/datasets/inhard/indices/baseline_skel_train_bg.csv \
+  --val_csv   /workspace/datasets/inhard/indices/baseline_skel_val_bg.csv \
+  --log_dir   /workspace/har-fusion/runs/fusion \
+  --txt_log_dir /workspace/trainheads/runs/fusion \
+  --run_name  14cls_fusion_late_probs_multitask_ablation1 \
+  --labelmap  /workspace/har-fusion/runs/fusion/14cls_fusion_v1/label2id.json \
+  --T 64 --tsn_segments 8 --tsn_snippet 8 \
+  --d_model 512 --n_heads 8 --depth 4 --ff_mult 4 --amp \
+  --decode_smpl --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data \
+  --fusion_type late --late_fuse_on probs --late_train_mode multitask
+
+
+#early fusion high occlusion
+python /workspace/trainheads/train_fusion_ablation.py \
+  --train_csv /workspace/datasets/ucf_indices/ucf_train.csv \
+  --val_csv   /workspace/datasets/ucf_indices/ucf19_occ_val.csv \
+  --log_dir   /workspace/har-fusion/runs/fusion \
+  --txt_log_dir /workspace/trainheads/runs/fusion \
+  --run_name  14cls_fusion_ablation_early_h1 \
+  --labelmap  /workspace/har-fusion/runs/video_only/label2id_ucf101.json \
+  --T 64 --tsn_segments 8 --tsn_snippet 8 \
+  --d_model 512 --n_heads 8 --depth 4 --ff_mult 4 --amp \
+  --decode_smpl --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data \
+  --fusion_type early

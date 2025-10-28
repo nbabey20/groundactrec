@@ -1,0 +1,38 @@
+python ./preprocess_features.py \
+    --csv /workspace/datasets/inhard/indices/baseline_skel_train_bg.csv \
+    --output_dir /workspace/datasets/inhard/om_fusion_features \
+    --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data/smpl
+
+
+python ./preprocess_features.py \
+    --csv /workspace/datasets/inhard/indices/baseline_skel_val_bg.csv \
+    --output_dir /workspace/datasets/inhard/om_fusion_features \
+    --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data/smpl
+
+
+python ./preprocess_features.py \
+    --train_csv    /workspace/datasets/inhard/indices/baseline_skel_train_bg.csv \
+    --val_csv      /workspace/datasets/inhard/indices/baseline_skel_val_bg.csv \
+    --labelmap     /workspace/har-fusion/runs/fusion/14cls_fusion_v1/label2id.json \
+    --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data/smpl \
+    --run_dir      /workspace/har-fusion/runs/om_fusion_gpu_run1 \
+    --d_model      512 \
+    --n_heads      8 \
+    --n_layers     4 \
+    --batch_size   64 \
+    --epochs       100
+
+
+
+python ./preprocess_features.py \
+    --train_csv    /workspace/datasets/inhard/indices/baseline_skel_train_bg.csv \
+    --val_csv      /workspace/datasets/inhard/indices/baseline_skel_val_bg.csv \
+    --labelmap     /workspace/har-fusion/runs/fusion/14cls_fusion_v1/label2id.json \
+    --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data/smpl \
+    --run_dir      /workspace/har-fusion/runs/om_fusion_final_run2 \
+    --d_model      512 \
+    --n_layers     4 \
+    --n_heads      8 \
+    --d_ff         2048 \
+    --batch_size   128 \
+    --epochs       30

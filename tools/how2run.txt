@@ -1,0 +1,34 @@
+python /workspace/tools/make_indices_from_inhard_csv.py \
+  --inhard_csv /workspace/datasets/inhard/InHARD/Segmented/InHARD.csv \
+  --train_ids  /workspace/datasets/inhard/splits/train_ids.txt \
+  --val_ids    /workspace/datasets/inhard/splits/val_ids.txt \
+  --vjepa_dir  /workspace/results/vjepa \
+  --skel_dir   /workspace/results/comotion \
+  --out_dir    /workspace/datasets/inhard/indices \
+  --label_level high \
+  --min_duration 0.0
+
+
+#RUN MAKE OCCLUSION SUBSET
+python make_occlusion_subset_proxies.py \
+  --index_csv /workspace/datasets/inhard/indices/baseline_skel_val_bg.csv \
+  --mot_root  /workspace/results/comotion \
+  --cropped_root /workspace/cropped \
+  --out_dir   /workspace/har-fusion/occ_proxy_splits \
+  --decode_smpl --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data \
+  --high_pct  0.20 \
+  --viz_top_k 24 \
+  --hard_z    1.0 \
+  --w_jerk    1.0 --w_blen 1.0 --w_bbox 1.0
+
+python sample_keyconf_subset.py \
+  --index_csv /workspace/datasets/inhard/indices/baseline_skel_val_bg.csv \
+  --cropped_root /workspace/cropped \
+  --out_csv /workspace/har-fusion/keyconf_pilot_200.csv \
+  --n 200
+
+#Extract frames from index
+python /workspace/tools/extract_frames_from_index.py \
+  --index /workspace/datasets/inhard/indices/baseline_skel_val_bg.csv \
+  --video-root /workspace/cropped \
+  --frames-root /workspace/frames

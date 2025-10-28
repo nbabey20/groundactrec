@@ -1,0 +1,162 @@
+##TRAIN VJEPA BASE##
+
+conda activate /workspace/envs/baselines
+python /workspace/trainheads/train_vjepa_base.py \
+  --train_csv /workspace/datasets/inhard/indices/baseline_video_train_bg.csv \
+  --val_csv   /workspace/datasets/inhard/indices/baseline_video_val_bg.csv \
+  --log_dir   /workspace/har-fusion/runs/video_only \
+  --amp
+
+python /workspace/trainheads/train_vjepa_base.py \
+  --train_csv /path/to/train.csv \
+  --val_csv   /path/to/val.csv \
+  --log_dir   /workspace/har-fusion/runs/video_only \
+  --txt_log_dir /workspace/trainheads/runs/vjepa_only \
+  --epochs 30 --batch_size 128 --num_workers 12 --amp
+
+python /workspace/trainheads/train_vjepa_base.py \
+  --train_csv /workspace/datasets/inhard/indices/baseline_video_train_bg.csv \
+  --val_csv   /workspace/datasets/inhard/indices/baseline_video_val_bg.csv \
+  --log_dir   /workspace/har-fusion/runs/video_only \
+  --txt_log_dir /workspace/trainheads/runs/vjepa_only \
+  --run_name  14cls_v3 \
+  --labelmap  /workspace/har-fusion/runs/video_only/14cls_v1/label2id.json \
+  --T 64 --tsn_segments 8 --tsn_snippet 8 \
+  --epochs 30 --batch_size 128 --num_workers 6 --amp
+
+
+##TRAIN COMOTION ##
+# Make sure: pip install smplx  and  --smpl_model_dir points to your SMPL models
+(baselines) python /workspace/trainheads/train_comotion_base.py \
+  --train_csv /workspace/datasets/inhard/indices/baseline_skel_train_bg.csv \
+  --val_csv   /workspace/datasets/inhard/indices/baseline_skel_val_bg.csv \
+  --log_dir   /workspace/har-fusion/runs/skel_only \
+  --txt_log_dir /workspace/trainheads/runs/comotion_only \
+  --decode_smpl --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data \
+  --T 64 --tsn_segments 8 --tsn_snippet 8 \
+  --epochs 30 --batch_size 128 --amp
+
+python /workspace/trainheads/train_comotion_base.py \
+  --train_csv /workspace/datasets/inhard/indices/baseline_skel_train_bg.csv \
+  --val_csv   /workspace/datasets/inhard/indices/baseline_skel_val_bg.csv \
+  --log_dir   /workspace/har-fusion/runs/skel_only \
+  --txt_log_dir /workspace/trainheads/runs/comotion_only \
+  --decode_smpl --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data \
+  --cache_dir /workspace/har-fusion/feat_cache \
+  --T 64 --tsn_segments 8 --tsn_snippet 8 \
+  --epochs 30 \
+  --batch_size 128 \
+  --num_workers 12 \
+  --amp \
+  --labelmap /workspace/har-fusion/runs/skel_only/label2id_inhard14.json \
+  --run_name inhard_skel_run1
+
+#COMOTION UCF GENERAL AR
+
+
+python /workspace/trainheads/train_comotion_base.py \
+  --train_csv /workspace/datasets/ucf_indices/ucf_train.csv \
+  --val_csv   /workspace/datasets/ucf_indices/ucf_val.csv \
+  --log_dir   /workspace/har-fusion/runs/skel_only \
+  --txt_log_dir /workspace/trainheads/runs/comotion_only \
+  --decode_smpl \
+  --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data \
+  --cache_dir /workspace/har-fusion/feat_cache \
+  --T 64 --tsn_segments 8 --tsn_snippet 8 \
+  --epochs 30 \
+  --batch_size 256 \
+  --num_workers 16 \
+  --amp \
+  --labelmap /workspace/har-fusion/runs/skel_only/label2id_ucf101.json \
+  --run_name ucf101_skel_run1
+
+#COMOTION UCF GEN GPU TEST
+python /workspace/trainheads/train_comotion_base.py \
+  --train_csv /workspace/datasets/ucf_indices/ucf_train.csv \
+  --val_csv   /workspace/datasets/ucf_indices/ucf_val.csv \
+  --log_dir   /workspace/har-fusion/runs/skel_only \
+  --txt_log_dir /workspace/trainheads/runs/comotion_only \
+  --decode_smpl \
+  --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data \
+  --cache_dir /workspace/har-fusion/feat_cache \
+  --T 64 --tsn_segments 8 --tsn_snippet 8 \
+  --epochs 30 \
+  --batch_size 128 \
+  --num_workers 16 \
+  --prefetch_factor 4 \
+  --amp \
+  --labelmap /workspace/har-fusion/runs/skel_only/label2id_ucf101.json \
+  --run_name ucf101_skel_run3_128 \
+  --seed 44
+
+##VJEPA UCF TEST
+python /workspace/trainheads/train_vjepa_base.py \
+  --train_csv /workspace/datasets/ucf_indices/ucf_train.csv \
+  --val_csv   /workspace/datasets/ucf_indices/ucf_val.csv \
+  --log_dir   /workspace/har-fusion/runs/video_only \
+  --txt_log_dir /workspace/trainheads/runs/vjepa_only \
+  --run_name  ucf101_vjepa_run3 \
+  --labelmap  /workspace/har-fusion/runs/video_only/label2id_ucf101.json \
+  --T 64 --tsn_segments 8 --tsn_snippet 8 \
+  --epochs 30 --batch_size 128 --num_workers 16 --amp \
+  --seed 44
+
+##FUSION UCF
+python /workspace/trainheads/train_fusion.py \
+  --train_csv /workspace/datasets/ucf_indices/ucf_train.csv \
+  --val_csv   /workspace/datasets/ucf_indices/ucf_val.csv \
+  --log_dir   /workspace/har-fusion/runs/fusion \
+  --txt_log_dir /workspace/trainheads/runs/fusion \
+  --run_name  ucf101_fusion_run2 \
+  --labelmap  /workspace/har-fusion/runs/fusion/label2id_ucf101.json \
+  --T 64 --tsn_segments 8 --tsn_snippet 8 \
+  --d_model 512 --n_heads 8 --depth 4 --ff_mult 4 --amp \
+  --decode_smpl --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data \
+  --dump_attention 6 --attn_layers 0,1,2,3 \
+  --seed 43
+
+
+
+##TRAIN FUSION##
+python /workspace/trainheads/train_fusion.py \
+  --train_csv /workspace/datasets/inhard/indices/baseline_skel_train_bg.csv \
+  --val_csv   /workspace/datasets/inhard/indices/baseline_skel_val_bg.csv \
+  --log_dir   /workspace/har-fusion/runs/fusion \
+  --txt_log_dir /workspace/trainheads/runs/fusion \
+  --run_name  14cls_fusion_vTEST \
+  --labelmap  /workspace/har-fusion/runs/fusion/14cls_fusion_v1/label2id.json \
+  --T 64 --tsn_segments 8 --tsn_snippet 8 \
+  --d_model 512 --n_heads 8 --depth 4 --ff_mult 4 --amp \
+  --decode_smpl --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data \
+  --dump_attention 6 --attn_layers 0,1,2,3
+
+##TRAINED GATED FUSIOJN:
+
+##GATED FUSION INHARD
+python /workspace/trainheads/trained_gated_fusion.py \
+  --train_csv /workspace/datasets/inhard/indices/baseline_skel_train_bg.csv \
+  --val_csv   /workspace/datasets/inhard/indices/baseline_skel_val_bg.csv \
+  --log_dir   /workspace/har-fusion/runs/gated_fusion \
+  --txt_log_dir /workspace/trainheads/runs/gated_fusion \
+  --run_name  14cls_gated_fusion_v1 \
+  --labelmap  /workspace/har-fusion/runs/fusion/14cls_fusion_v1/label2id.json \
+  --T 64 --tsn_segments 8 --tsn_snippet 8 \
+  --d_model 512 --n_heads 8 --depth 4 --ff_mult 4 --dropout 0.1 \
+  --epochs 30 --batch_size 128 --lr 3e-4 --weight_decay 0.05 --grad_clip 1.0 --amp \
+  --num_workers 16 --prefetch_factor 4
+
+#GATED FUSION HIGH OCCLUSION
+python /workspace/trainheads/trained_gated_fusion.py \
+  --train_csv /workspace/datasets/ucf_indices/ucf_train.csv \
+  --val_csv   /workspace/datasets/ucf_indices/ucf19_occ_val.csv \
+  --log_dir   /workspace/har-fusion/runs/gated_fusion \
+  --txt_log_dir /workspace/trainheads/runs/gated_fusion \
+  --run_name  14cls_gated_fusion_HIGHOCC_v2 \
+  --labelmap  /workspace/har-fusion/runs/video_only/label2id_ucf101.json \
+  --T 64 --tsn_segments 8 --tsn_snippet 8 \
+  --d_model 512 --n_heads 8 --depth 4 --ff_mult 4 --dropout 0.1 \
+  --epochs 30 --batch_size 128 --lr 3e-4 --weight_decay 0.05 --grad_clip 1.0 --amp \
+  --num_workers 16 --prefetch_factor 4
+
+
+
