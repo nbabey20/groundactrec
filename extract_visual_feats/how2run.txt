@@ -1,0 +1,33 @@
+
+# PyTorch (CUDA 12.1 wheels exist for Py3.11)
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+
+# V-JEPA 2 + helpers
+pip install git+https://github.com/facebookresearch/vjepa2.git \
+            timm einops decord ffmpeg-python tqdm
+
+
+
+
+
+chmod +x /workspace/VJEPA2/extract_features.py
+
+sanity check:
+cd /workspace/VJEPA2
+
+python /workspace/VJEPA2/extract_features.py \
+       --src "/workspace/cropped" \
+       --test one
+
+
+
+python extract_features.py \
+       --src  /workspace/cropped \
+       --sample 5 \
+       --num-workers 0 
+
+# sanity run on 5 clips -> results/vjepa/_sample/…
+python extract_features.py --src /workspace/cropped --sample 5
+
+# full extraction with timing -> results/vjepa/<Action>/<clip>.pt
+python extract_features.py --src /workspace/cropped --num-workers 0

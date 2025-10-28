@@ -23,14 +23,14 @@ python /workspace/trainheads/train_vjepa_base.py \
   --val_csv   /workspace/datasets/ucf_indices/ucf19_occ_val.csv \
   --log_dir   /workspace/har-fusion/runs/video_only \
   --txt_log_dir /workspace/trainheads/runs/vjepa_only \
-  --run_name  ucf101_vjepa_highocc_run5 \
+  --run_name  ucf101_vjepa_highocc_run3 \
   --labelmap  /workspace/har-fusion/runs/video_only/label2id_ucf101.json \
   --T 64 --tsn_segments 8 --tsn_snippet 8 \
   --epochs 30 --batch_size 128 --num_workers 16 --amp \
-  --seed 48
+  --seed 45
 
 #FUSION
-python /workspace/trainheads/train_fusion.py \
+python /workspace/trainheads/train_crossatt_fusion.py \
   --train_csv /workspace/datasets/ucf_indices/ucf_train.csv \
   --val_csv   /workspace/datasets/ucf_indices/ucf19_occ_val.csv \
   --log_dir   /workspace/har-fusion/runs/fusion \
@@ -44,7 +44,7 @@ python /workspace/trainheads/train_fusion.py \
   --seed 43
 
 #FUSION CHECKPT
-python /workspace/trainheads/train_fusion.py \
+python /workspace/trainheads/train_crossatt_fusion.py \
   --occ_eval \
   --occ_low_csv  /workspace/datasets/ucf_indices/ucf19_occ_val.csv \
   --occ_high_csv /workspace/datasets/ucf_indices/ucf19_occ_val.csv \
@@ -53,5 +53,16 @@ python /workspace/trainheads/train_fusion.py \
   --T 64 --tsn_segments 8 --tsn_snippet 8 \
   --batch_size 128 --num_workers 24 --amp \
   --decode_smpl --smpl_model_dir /workspace/ml-comotion/src/comotion_demo/data
+  --seed 45
 
-#VJEPA CHECKPT
+#types of fusion:
+--fusion_type xattn (default; same as now)
+
+Early fusion:
+--fusion_type early
+
+Late fusion (fused loss on logits):
+--fusion_type late --late_train_mode fused --late_fuse_on logits
+
+Late fusion (multi-task):
+--fusion_type late --late_train_mode multitask --late_fuse_on logits

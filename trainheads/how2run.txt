@@ -102,7 +102,7 @@ python /workspace/trainheads/train_vjepa_base.py \
   --seed 44
 
 ##FUSION UCF
-python /workspace/trainheads/train_fusion.py \
+python /workspace/trainheads/train_crossatt_fusion.py \
   --train_csv /workspace/datasets/ucf_indices/ucf_train.csv \
   --val_csv   /workspace/datasets/ucf_indices/ucf_val.csv \
   --log_dir   /workspace/har-fusion/runs/fusion \
@@ -118,7 +118,7 @@ python /workspace/trainheads/train_fusion.py \
 
 
 ##TRAIN FUSION##
-python /workspace/trainheads/train_fusion.py \
+python /workspace/trainheads/train_crossatt_fusion.py \
   --train_csv /workspace/datasets/inhard/indices/baseline_skel_train_bg.csv \
   --val_csv   /workspace/datasets/inhard/indices/baseline_skel_val_bg.csv \
   --log_dir   /workspace/har-fusion/runs/fusion \

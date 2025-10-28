@@ -30,7 +30,7 @@ python /workspace/trainheads/train_vjepa_base.py \
   --seed 45
 
 #FUSION
-python /workspace/trainheads/train_fusion.py \
+python /workspace/trainheads/train_crossatt_fusion.py \
   --train_csv /workspace/datasets/ucf_indices/ucf_train.csv \
   --val_csv   /workspace/datasets/ucf_indices/ucf19_occ_val.csv \
   --log_dir   /workspace/har-fusion/runs/fusion \
@@ -44,7 +44,7 @@ python /workspace/trainheads/train_fusion.py \
   --seed 43
 
 #FUSION CHECKPT
-python /workspace/trainheads/train_fusion.py \
+python /workspace/trainheads/train_crossatt_fusion.py \
   --occ_eval \
   --occ_low_csv  /workspace/datasets/ucf_indices/ucf19_occ_val.csv \
   --occ_high_csv /workspace/datasets/ucf_indices/ucf19_occ_val.csv \
